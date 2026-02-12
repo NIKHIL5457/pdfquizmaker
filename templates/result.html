@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="View your PDF quiz results and performance">
+    <title>Quiz Results - PDF Quiz Maker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h2 style="margin-bottom: 0;">📊 Your Results</h2>
+                <a href="/reset" class="btn-outline" style="width: auto; padding: 8px 20px;">← New Quiz</a>
+            </div>
+            
+            {% if not results %}
+            <div style="text-align: center; padding: 60px 40px;">
+                <div style="font-size: 64px; margin-bottom: 20px;">📭</div>
+                <p style="color: #666; font-size: 18px; margin-bottom: 30px;">No results to display.</p>
+                <a href="/reset" class="btn" style="width: auto; padding: 12px 40px;">📁 Create New Quiz</a>
+            </div>
+            {% else %}
+            
+            <div class="score-card">
+                <div class="score-number">{{ score }}/{{ total }}</div>
+                <div class="score-percentage">{{ percentage }}%</div>
+                <p style="margin-top: 15px; opacity: 0.9; font-size: 18px;">
+                    {% if percentage >= 80 %}
+                        🌟 Excellent work! You've mastered this content.
+                    {% elif percentage >= 60 %}
+                        👍 Good job! You're on the right track.
+                    {% elif percentage >= 40 %}
+                        📚 Keep practicing! You're getting there.
+                    {% elif percentage >= 20 %}
+                        💪 Keep studying! Review the material and try again.
+                    {% else %}
+                        🔄 Start fresh! Don't give up, you can do it!
+                    {% endif %}
+                </p>
+                
+                <!-- Mini performance summary -->
+                <div style="display: flex; justify-content: center; gap: 40px; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2);">
+                    <div>
+                        <div style="font-size: 24px; font-weight: 700;">{{ score }}</div>
+                        <div style="font-size: 14px; opacity: 0.8;">Correct</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; font-weight: 700;">{{ total - score }}</div>
+                        <div style="font-size: 14px; opacity: 0.8;">Incorrect</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 24px; font-weight: 700;">{{ total }}</div>
+                        <div style="font-size: 14px; opacity: 0.8;">Total</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin-bottom: 0;">📝 Question Review</h3>
+                <span style="background: #f0f2ff; color: #667eea; padding: 6px 16px; border-radius: 20px; font-size: 14px; font-weight: 600;">
+                    {{ results|length }} Questions
+                </span>
+            </div>
+            
+            {% for result in results %}
+            <div class="result-item" style="{% if result.is_correct %}background: #f0fff4; border-left: 4px solid #48bb78;{% else %}background: #fff5f5; border-left: 4px solid #f56565;{% endif %} border-radius: 12px; margin-bottom: 15px; padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <p style="font-weight: 600; margin: 0; color: #4a5568;">
+                        Question {{ loop.index }} 
+                        <span style="font-weight: 400; color: #718096; margin-left: 8px;">• {{ result.type }}</span>
+                    </p>
+                    <span style="{% if result.is_correct %}background: #c6f6d5; color: #22543d;{% else %}background: #fed7d7; color: #742a2a;{% endif %} padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                        {% if result.is_correct %}✅ Correct{% else %}❌ Incorrect{% endif %}
+                    </span>
+                </div>
+                
+                <p style="margin-bottom: 16px; color: #2d3748; font-size: 16px; line-height: 1.6; background: white; padding: 12px; border-radius: 8px;">
+                    {{ result.question }}
+                </p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: white; padding: 16px; border-radius: 8px;">
+                    <div>
+                        <span style="color: #718096; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">Your answer</span>
+                        <br>
+                        <span style="font-size: 16px; font-weight: 500; {% if result.is_correct %}color: #2f855a;{% else %}color: #c53030;{% endif %}">
+                            {{ result.user_answer if result.user_answer != 'Not answered' else 'Not answered' }}
+                        </span>
+                    </div>
+                    <div>
+                        <span style="color: #718096; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;">Correct answer</span>
+                        <br>
+                        <span style="color: #2f855a; font-size: 16px; font-weight: 600;">
+                            {{ result.correct_answer }}
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Explanation hint (optional) -->
+                {% if not result.is_correct %}
+                <div style="margin-top: 16px; padding: 12px; background: #ebf8ff; border-radius: 8px; color: #2c5282; font-size: 14px;">
+                    <span style="font-weight: 600;">💡 Tip:</span> The correct answer is "{{ result.correct_answer }}". Review this topic to improve!
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <!-- Action buttons -->
+            <div style="display: flex; gap: 16px; justify-content: center; margin-top: 40px;">
+                <a href="/reset" class="btn" style="width: auto; padding: 12px 40px; background: #667eea;">
+                    📁 Create New Quiz
+                </a>
+                <button onclick="window.print()" class="btn-outline" style="width: auto; padding: 12px 40px;">
+                    🖨️ Print Results
+                </button>
+            </div>
+            
+            <!-- Share results (optional) -->
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                <p style="color: #718096; font-size: 14px; margin-bottom: 10px;">Share your achievement</p>
+                <div style="display: flex; gap: 12px; justify-content: center;">
+                    <span style="background: #1DA1F2; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer;" onclick="alert('Twitter sharing would be integrated here!')">🐦 Twitter</span>
+                    <span style="background: #4267B2; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer;" onclick="alert('Facebook sharing would be integrated here!')">📘 Facebook</span>
+                    <span style="background: #0A66C2; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; cursor: pointer;" onclick="alert('LinkedIn sharing would be integrated here!')">💼 LinkedIn</span>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <!-- Add this to your static/script.js or keep here -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate score on load
+            const scoreElement = document.querySelector('.score-number');
+            if (scoreElement) {
+                scoreElement.style.opacity = '0';
+                scoreElement.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    scoreElement.style.transition = 'all 0.5s ease';
+                    scoreElement.style.opacity = '1';
+                    scoreElement.style.transform = 'scale(1)';
+                }, 100);
+            }
+            
+            // Print function
+            window.printResults = function() {
+                window.print();
+            };
+            
+            // Confetti for high scores (80%+)
+            {% if percentage >= 80 %}
+            // Simple confetti effect
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.position = 'fixed';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.top = '-10px';
+                    confetti.style.width = '8px';
+                    confetti.style.height = '8px';
+                    confetti.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.pointerEvents = 'none';
+                    confetti.style.zIndex = '9999';
+                    confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear`;
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 50);
+            }
+            {% endif %}
+        });
+        
+        // Add confetti animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

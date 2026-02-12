@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Quiz - PDF Quiz Maker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <h2 style="margin-bottom: 0;">📝 Your Quiz</h2>
+                <a href="/reset" class="btn-outline" style="width: auto; padding: 8px 20px;">← New PDF</a>
+            </div>
+            
+            <div class="progress">
+                <div class="progress-bar" style="width: 0%;"></div>
+            </div>
+            
+            <form action="/submit-quiz" method="post">
+                {% for q in quiz %}
+                <div class="question">
+                    <div class="question-header">
+                        <span class="question-number">Question {{ loop.index }}</span>
+                        <span class="question-type">{{ q.type }}</span>
+                    </div>
+                    
+                    <div class="question-text">{{ q.question }}</div>
+                    
+                    <div class="options">
+                        {% if q.type == 'MCQ' or q.type == 'True/False' %}
+                            {% for option in q.options %}
+                            <label class="option">
+                                <input type="radio" name="q_{{ q.id }}" value="{{ option }}" required>
+                                <span>{{ option }}</span>
+                            </label>
+                            {% endfor %}
+                        {% else %}
+                            <!-- Fill in blank -->
+                            <input type="text" name="q_{{ q.id }}" placeholder="Type your answer here..." required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 16px;">
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn mt-2">
+                    <span>🎯</span> Submit Answers
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

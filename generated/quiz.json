@@ -1,0 +1,67 @@
+[
+  {
+    "id": 0,
+    "question": "What is the primary function or purpose of Lambda?",
+    "options": [
+      "To process user input",
+      "To generate reports",
+      "To store and manage data",
+      "To perform simple \ntasks"
+    ],
+    "correct": "To perform simple \ntasks",
+    "topic": "Lambda",
+    "category": "Function"
+  },
+  {
+    "id": 1,
+    "question": "Which of the following is a characteristic or feature of Python?",
+    "options": [
+      "Ternary statements are generally only used for \nsimple conditions, not recommended for nested or ...",
+      "There are 3 main conditional statements in Python: \n1",
+      "A login system that checks for correct/ incorrect credentials \n \nTernary Statements \nTernary stat...",
+      "Python has 2 main types of loops: \n1"
+    ],
+    "correct": "Python has 2 main types of loops: \n1",
+    "topic": "Python",
+    "category": "Characteristic"
+  },
+  {
+    "id": 2,
+    "question": "Which of the following is a characteristic or feature of We?",
+    "options": [
+      "Ternary statements are generally only used for \nsimple conditions, not recommended for nested or ...",
+      "There are 3 main conditional statements in Python: \n1",
+      "We cannot have a non-default argument after a default argument",
+      "A login system that checks for correct/ incorrect credentials \n \nTernary Statements \nTernary stat..."
+    ],
+    "correct": "We cannot have a non-default argument after a default argument",
+    "topic": "We",
+    "category": "Characteristic"
+  },
+  {
+    "id": 3,
+    "question": "Which of the following is a characteristic or feature of Some?",
+    "options": [
+      "A login system that checks for correct/ incorrect credentials \n \nTernary Statements \nTernary stat...",
+      "Some built-in functions that we have already used till now: \n1",
+      "There are 3 main conditional statements in Python: \n1",
+      "Ternary statements are generally only used for \nsimple conditions, not recommended for nested or ..."
+    ],
+    "correct": "Some built-in functions that we have already used till now: \n1",
+    "topic": "Some",
+    "category": "Characteristic"
+  },
+  {
+    "id": 4,
+    "question": "According to the document, which statement about There is true?",
+    "options": [
+      "This is only partially correct",
+      "The document contradicts this statement",
+      "There are 3 main conditional statements in Python: \n1",
+      "This information is not mentioned in the document"
+    ],
+    "correct": "There are 3 main conditional statements in Python: \n1",
+    "topic": "There",
+    "category": "General Fact"
+  }
+]

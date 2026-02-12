@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Quiz Maker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>📄 PDF Quiz Maker</h1>
+            <p style="color: #666; margin-bottom: 30px;">Upload any PDF and get an instant quiz</p>
+            
+            {% if error %}
+            <div style="background: #fed7d7; color: #c53030; padding: 16px; border-radius: 12px; margin-bottom: 25px;">
+                ⚠️ {{ error }}
+            </div>
+            {% endif %}
+            
+            <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                <div class="upload-area">
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Click or drag PDF here</div>
+                    <div class="upload-hint">Supports text-based PDFs</div>
+                    <input type="file" id="file" name="file" accept=".pdf">
+                </div>
+                
+                <div class="form-group">
+                    <label for="num_questions">Number of questions</label>
+                    <select id="num_questions" name="num_questions">
+                        <option value="3">3 questions</option>
+                        <option value="5" selected>5 questions</option>
+                        <option value="7">7 questions</option>
+                        <option value="10">10 questions</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn">
+                    <span>✨</span> Generate Quiz
+                </button>
+            </form>
+            
+            
+        </div>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
